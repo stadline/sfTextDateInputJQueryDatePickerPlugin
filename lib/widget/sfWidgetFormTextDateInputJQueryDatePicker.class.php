@@ -28,9 +28,9 @@ class sfWidgetFormTextDateInputJQueryDatePicker extends sfWidgetForm {
 			$buttonImageCode = sprintf(', buttonImage: "%s", buttonImageOnly: true', $this->getOption('image'));
 		}
 
-		return
-			$dateWidget->render($name, $value, $attributes, $errors).
-			sprintf(<<<EOF
+		$code = $dateWidget->render($name, $value, $attributes, $errors);
+		if ((!isset($attributes['readonly'])) && (!isset($attributes['disabled']))) {
+			$code .= sprintf(<<<EOF
 <script type="text/javascript">
 $('#%s').datepicker({ dateFormat:'yy-mm-dd%s', showOn:'button', constrainInput:false%s });
 $('#%s').change(function() {
@@ -46,5 +46,7 @@ EOF
 				$id,
 				$includeTime ? ' HH:mm:ss' : ''
 			);
+		}
+		return $code;
 	}
 }
